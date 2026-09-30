@@ -1,0 +1,56 @@
+:root {
+  --farm-gap: 4px;
+  --tile-size: 48px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  padding: 12 px;
+
+  color: var(--vscode-foreground);
+  background: var(--vscode-panel-background);
+
+  font-family: var(--vscode-font-family);
+}
+
+.farm-container {
+  width: 100%;
+
+  & h1 {
+    margin: 0;
+  }
+}
+
+/** gridsize 6 * 4 = 24 tiles */
+.farm-grid {
+  display: grid;
+
+  grid-template-columns: repeat(6, var(--tile-size));
+  grid-template-rows: repeat(4, var(--tile-size));
+
+  gap: var(--farm-gap);
+}
+
+.farm-tile {
+  width: var(--tile-size);
+  height: var(--tile-size);
+
+  border: 1px solid var(--vscode-panel-border);
+
+  background: var(--vscode-textBlockQuote-background);
+
+  cursor: pointer;
+
+  &.selected {
+    outline: 24x solid var(--vscode-focusBorder);
+  }
+}
