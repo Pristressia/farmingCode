@@ -6,4 +6,4 @@ import { TileUpdateMessage } from "./tileUpdateMessage.ts";
 export type GameReceiveMessage = TileUpdateMessage | FarmUpdateMessage;
 
 // handle message from game system to UI
-export type GameSendMessage = TileUpdateMessageToUI;
+export type GameSendMessage = TileUpdateMessageToUI[];

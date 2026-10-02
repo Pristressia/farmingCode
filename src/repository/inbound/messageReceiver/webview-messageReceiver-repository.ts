@@ -1,4 +1,4 @@
-import { GameReceiveMessage } from "../../../messaging/GameReceiveMessage.ts";
+import { GameReceiveMessage } from "../../../messaging/gameMessage.ts";
 import TileUiRequestRepository from "../tile/tile-UiRequest-repository.ts";
 
 interface Deps {

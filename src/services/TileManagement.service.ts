@@ -13,26 +13,33 @@ export default class TileManagementService {
     this.farm = deps.farmState;
   }
 
-  getTile(position: TilePosition): TileState | null {
+  private getTile(position: TilePosition): TileState | null {
     return this.farm.tilesMap?.[position.y]?.[position.x] ?? null;
   }
 
   prepareTile(position: TilePosition): TileState | null {
-    const tile = this.farm.getTile(position);
+    const tile = this.getTile(position);
     if (!tile) {
       return null;
     }
 
     tile.prepared = true;
 
+    console.info("request prepared tiles");
+    console.table(tile);
     return tile;
   }
 
   waterTile(position: TilePosition): TileState | null {
-    const tile = this.farm.getTile(position);
+    const tile = this.getTile(position);
     if (!tile) {
       return null;
     }
+
+    tile.watered = true;
+
+    console.info("request watered tiles");
+    console.table(tile);
     return tile;
   }
 }

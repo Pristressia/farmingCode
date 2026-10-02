@@ -1,17 +1,13 @@
 import fs from "fs";
-import path from "path";
-import { fileURLToPath } from "url";
 import * as vscode from "vscode";
-import FarmState from "./domain/farmState.ts";
-import { GameReceiveMessage } from "./messaging/domainMessage.ts";
+
+import { gameProgression, messageReceiver } from "./compositor/repository.ts";
+import { GameReceiveMessage } from "./messaging/gameMessage.ts";
 
 export class FarmViewProvider implements vscode.WebviewViewProvider {
   public static readonly viewType = "farmingCode.farmView";
 
-  constructor(
-    private readonly extensionUri: vscode.Uri,
-    private readonly farmState: FarmState,
-  ) {}
+  constructor(private readonly extensionUri: vscode.Uri) {}
 
   resolveWebviewView(
     webviewView: vscode.WebviewView,
@@ -21,6 +17,7 @@ export class FarmViewProvider implements vscode.WebviewViewProvider {
     console.log("🌱 FARM VIEW RESOLVING");
 
     const webview = webviewView.webview;
+
     webviewView.webview.options = {
       enableScripts: true,
 
@@ -33,6 +30,11 @@ export class FarmViewProvider implements vscode.WebviewViewProvider {
     webviewView.webview.onDidReceiveMessage((message: GameReceiveMessage) => {
       this.handleMessage(message);
     });
+
+    gameProgression.subscribe((event) => {
+      this.pushMessageToUi(webviewView, event);
+    });
+
     console.log("🌱 FARM HTML ASSIGNED");
   }
 
@@ -64,13 +66,10 @@ export class FarmViewProvider implements vscode.WebviewViewProvider {
   //#endregion
 
   private handleMessage(message: GameReceiveMessage) {
-    // switch (message.type) {
-    //   case "tile:update":
-    //     this.handleTileUpdate(message);
-    //     break;
-    //   case "farm:update":
-    //     this.handleFarmUpdate(message);
-    //     break;
-    // }
+    messageReceiver.receive(message);
+  }
+
+  private pushMessageToUi(webviewView: vscode.WebviewView, message: object) {
+    return webviewView.webview.postMessage(message);
   }
 }

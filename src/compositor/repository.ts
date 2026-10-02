@@ -3,42 +3,40 @@ import WebViewMessageReceiver from "../repository/inbound/messageReceiver/webvie
 import TileUiRequestRepository from "../repository/inbound/tile/tile-UiRequest-repository.ts";
 import TileToUIRepository from "../repository/outbound/tile/tile-toUiResponse-repository.ts";
 import TileRepository from "../repository/outbound/tile/tile-toUiResponse-repository.ts";
+import GameProgressionService from "../services/gameProgression.service.ts";
 import TileManagementService from "../services/TileManagement.service.ts";
 import { FARMSIZE } from "./constantConfig.ts";
 
 //#region game state
-const farmState = new FarmState(FARMSIZE);
 
-//#endregion
+export const gameProgression = new GameProgressionService({
+  farmSize: FARMSIZE,
+});
 
-//#region outbound adapter to webview
-const tileToUIRepo = new TileToUIRepository();
+const farm = gameProgression.currentFarmState;
+
 //#endregion
 
 //#region game state change repo
-const tileRepo = new TileRepository({
-  farmState: farmState,
-  TileToUIRepository,
-});
 
 //#endregion
 
 //#region service or application core
 
 const tileManagementService = new TileManagementService({
-  farmState: farmState,
+  farmState: farm,
 });
 
 //#endregion
 
 //#region inbound
+
 const tileUiRequestRepo = new TileUiRequestRepository({
   tileManagementService: tileManagementService,
-  tileToUIReponseRepo: tileToUIRepo,
 });
 
-const messageReceiver = new WebViewMessageReceiver({
-  tileUiRequestRepository: tile,
+export const messageReceiver = new WebViewMessageReceiver({
+  tileUiRequestRepository: tileUiRequestRepo,
 });
 
 //#endregion

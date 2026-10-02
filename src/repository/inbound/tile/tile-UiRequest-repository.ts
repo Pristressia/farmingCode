@@ -1,20 +1,17 @@
-import { GameReceiveMessage } from "../../../messaging/GameReceiveMessage.ts";
 import { TileUpdateMessage } from "../../../messaging/tileUpdateMessage.ts";
 import TileManagementService from "../../../services/TileManagement.service.ts";
 import TileToUIRepository from "../../outbound/tile/tile-toUiResponse-repository.ts";
 
 interface Deps {
   tileManagementService: TileManagementService;
-  tileToUIReponseRepo: TileToUIRepository;
 }
 
+/** for handle request message from ui */
 export default class TileUiRequestRepository {
   private readonly tileManagement: TileManagementService;
-  private readonly tileToUIReponseRepo: TileToUIRepository;
 
   constructor(deps: Deps) {
     this.tileManagement = deps.tileManagementService;
-    this.tileToUIReponseRepo = deps.tileToUIReponseRepo;
   }
 
   messageRequest(message: TileUpdateMessage) {
@@ -30,7 +27,5 @@ export default class TileUiRequestRepository {
       default:
         tile = null;
     }
-
-    return this.tileToUIReponseRepo.response(tile);
   }
 }
