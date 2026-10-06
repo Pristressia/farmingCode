@@ -1,4 +1,5 @@
 import FarmState from "../domain/farmState.ts";
+import GameChangeLogger from "../domain/gameChangeLogger.ts";
 import WebViewMessageReceiver from "../repository/inbound/messageReceiver/webview-messageReceiver-repository.ts";
 import TileUiRequestRepository from "../repository/inbound/tile/tile-UiRequest-repository.ts";
 import TileToUIRepository from "../repository/outbound/tile/tile-toUiResponse-repository.ts";
@@ -9,8 +10,13 @@ import { FARMSIZE } from "./constantConfig.ts";
 
 //#region game state
 
+export const changeLogger = new GameChangeLogger();
+
 export const gameProgression = new GameProgressionService({
   farmSize: FARMSIZE,
+  deps: {
+    changeLogger: changeLogger,
+  },
 });
 
 const farm = gameProgression.currentFarmState;
